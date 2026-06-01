@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Ankit Choubey — AI Builder & Automation Engineer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Mono:ital,wght@0,400;0,500;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --bg: #0a0a0a;
+    --surface: #111111;
+    --border: #1e1e1e;
+    --accent: #c8f135;
+    --accent2: #ff6b35;
+    --text: #f0ede8;
+    --muted: #666;
+    --card: #141414;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  /* Custom cursor */
+  .cursor {
+    width: 10px; height: 10px;
+    background: var(--accent);
+    border-radius: 50%;
+    position: fixed;
+    pointer-events: none;
+    z-index: 9999;
+    transition: transform 0.15s ease;
+    mix-blend-mode: difference;
+  }
+  .cursor-ring {
+    width: 36px; height: 36px;
+    border: 1px solid var(--accent);
+    border-radius: 50%;
+    position: fixed;
+    pointer-events: none;
+    z-index: 9998;
+    transition: all 0.1s ease;
+    opacity: 0.5;
+  }
+
+  /* Noise overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 1000;
+    opacity: 0.4;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0;
+    z-index: 100;
+    padding: 20px 48px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(10,10,10,0.8);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-logo {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 1.1rem;
+    letter-spacing: -0.02em;
+    color: var(--accent);
+  }
+  .nav-links { display: flex; gap: 32px; }
+  .nav-links a {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--muted);
+    text-decoration: none;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--accent); }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 0 48px 80px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-grid {
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(var(--border) 1px, transparent 1px),
+      linear-gradient(90deg, var(--border) 1px, transparent 1px);
+    background-size: 60px 60px;
+    opacity: 0.4;
+    mask-image: radial-gradient(ellipse 80% 60% at 50% 100%, black 30%, transparent 100%);
+  }
+
+  .hero-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--accent);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 24px;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.2s forwards;
+  }
+
+  .hero-name {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: clamp(3.5rem, 10vw, 9rem);
+    line-height: 0.92;
+    letter-spacing: -0.04em;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.4s forwards;
+  }
+  .hero-name span { color: var(--accent); }
+
+  .hero-sub {
+    font-size: 1.1rem;
+    color: var(--muted);
+    margin-top: 32px;
+    max-width: 520px;
+    line-height: 1.7;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.6s forwards;
+  }
+
+  .hero-cta {
+    margin-top: 48px;
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.8s forwards;
+  }
+
+  .btn {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.78rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 14px 28px;
+    border-radius: 2px;
+    text-decoration: none;
+    transition: all 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .btn-primary {
+    background: var(--accent);
+    color: #0a0a0a;
+    font-weight: 500;
+  }
+  .btn-primary:hover { background: #d4ff4a; transform: translateY(-2px); }
+  .btn-outline {
+    border: 1px solid var(--border);
+    color: var(--muted);
+  }
+  .btn-outline:hover { border-color: var(--accent); color: var(--accent); }
+
+  .hero-scroll {
+    position: absolute;
+    right: 48px; bottom: 80px;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--muted);
+    letter-spacing: 0.15em;
+    writing-mode: vertical-rl;
+    text-transform: uppercase;
+    opacity: 0;
+    animation: fadeUp 1s 1.2s forwards;
+  }
+  .hero-scroll::before {
+    content: '';
+    display: block;
+    width: 1px;
+    height: 60px;
+    background: var(--muted);
+    margin: 0 auto 12px;
+    animation: lineDown 1.5s 1.5s ease forwards;
+    transform-origin: top;
+    transform: scaleY(0);
+  }
+  @keyframes lineDown { to { transform: scaleY(1); } }
+
+  /* STATS STRIP */
+  .stats-strip {
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    overflow: hidden;
+  }
+  .stat {
+    flex: 1;
+    padding: 40px 32px;
+    border-right: 1px solid var(--border);
+    opacity: 0;
+    animation: fadeUp 0.6s forwards;
+  }
+  .stat:nth-child(1) { animation-delay: 0.1s; }
+  .stat:nth-child(2) { animation-delay: 0.2s; }
+  .stat:nth-child(3) { animation-delay: 0.3s; }
+  .stat:nth-child(4) { animation-delay: 0.4s; border-right: none; }
+
+  .stat-num {
+    font-family: 'Syne', sans-serif;
+    font-size: 2.8rem;
+    font-weight: 800;
+    color: var(--accent);
+    line-height: 1;
+  }
+  .stat-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-top: 8px;
+  }
+
+  /* SECTION BASE */
+  section { padding: 100px 48px; }
+  .section-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem;
+    color: var(--accent);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+  .section-title {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(2rem, 4vw, 3.2rem);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 1.05;
+    margin-bottom: 60px;
+  }
+
+  /* SKILLS */
+  .skills-section { background: var(--surface); }
+  .skills-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+  }
+  .skill-card {
+    background: var(--card);
+    padding: 32px 28px;
+    transition: background 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+  .skill-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 3px; height: 0;
+    background: var(--accent);
+    transition: height 0.3s;
+  }
+  .skill-card:hover::before { height: 100%; }
+  .skill-card:hover { background: #181818; }
+  .skill-icon { font-size: 1.6rem; margin-bottom: 16px; }
+  .skill-name {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 1rem;
+    margin-bottom: 8px;
+  }
+  .skill-desc { font-size: 0.82rem; color: var(--muted); line-height: 1.6; }
+
+  /* PROJECTS */
+  .projects-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; background: var(--border); border: 1px solid var(--border); }
+
+  .project-card {
+    background: var(--card);
+    padding: 48px 40px;
+    position: relative;
+    overflow: hidden;
+    transition: background 0.3s;
+    text-decoration: none;
+    color: inherit;
+    display: block;
+  }
+  .project-card:hover { background: #161616; }
+  .project-card::after {
+    content: '↗';
+    position: absolute;
+    top: 32px; right: 32px;
+    font-size: 1.2rem;
+    color: var(--muted);
+    transition: all 0.3s;
+    font-family: monospace;
+  }
+  .project-card:hover::after { color: var(--accent); transform: translate(4px, -4px); }
+
+  .project-number {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--muted);
+    letter-spacing: 0.15em;
+    margin-bottom: 32px;
+  }
+  .project-tag {
+    display: inline-block;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 2px;
+    margin-bottom: 20px;
+  }
+  .tag-ar { background: rgba(200,241,53,0.12); color: var(--accent); }
+  .tag-platform { background: rgba(255,107,53,0.12); color: var(--accent2); }
+
+  .project-title {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(1.5rem, 3vw, 2.2rem);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+    margin-bottom: 16px;
+  }
+  .project-desc { font-size: 0.9rem; color: var(--muted); line-height: 1.7; margin-bottom: 32px; }
+
+  .project-tech {
+    display: flex; flex-wrap: wrap; gap: 8px;
+  }
+  .tech-pill {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--muted);
+    border: 1px solid var(--border);
+    padding: 4px 10px;
+    border-radius: 20px;
+    letter-spacing: 0.05em;
+    transition: all 0.2s;
+  }
+  .project-card:hover .tech-pill { border-color: #333; color: #888; }
+
+  /* PROJECT visual flair */
+  .project-visual {
+    position: absolute;
+    bottom: -20px; right: -20px;
+    width: 140px; height: 140px;
+    border-radius: 50%;
+    opacity: 0.06;
+    transition: opacity 0.3s;
+  }
+  .project-card:hover .project-visual { opacity: 0.1; }
+  .visual-ar { background: radial-gradient(circle, var(--accent), transparent); }
+  .visual-platform { background: radial-gradient(circle, var(--accent2), transparent); }
+
+  /* AUTOMATION */
+  .automation-row {
+    display: flex;
+    gap: 2px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    margin-bottom: 2px;
+  }
+  .auto-card {
+    flex: 1;
+    background: var(--card);
+    padding: 36px 32px;
+    position: relative;
+    overflow: hidden;
+  }
+  .auto-line {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--accent), transparent);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.4s;
+  }
+  .auto-card:hover .auto-line { transform: scaleX(1); }
+  .auto-icon { font-size: 1.4rem; margin-bottom: 20px; }
+  .auto-title {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 1.05rem;
+    margin-bottom: 10px;
+  }
+  .auto-desc { font-size: 0.82rem; color: var(--muted); line-height: 1.6; }
+
+  /* HOW I WORK */
+  .how-section { background: var(--surface); }
+  .process-list { display: flex; flex-direction: column; gap: 0; border: 1px solid var(--border); }
+  .process-item {
+    display: flex;
+    gap: 0;
+    border-bottom: 1px solid var(--border);
+    overflow: hidden;
+    transition: background 0.2s;
+  }
+  .process-item:last-child { border-bottom: none; }
+  .process-item:hover { background: #141414; }
+  .process-num {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 0.75rem;
+    color: var(--accent);
+    padding: 32px 32px;
+    border-right: 1px solid var(--border);
+    min-width: 80px;
+    display: flex;
+    align-items: center;
+  }
+  .process-content { padding: 32px 40px; }
+  .process-title {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 1rem;
+    margin-bottom: 8px;
+  }
+  .process-desc { font-size: 0.85rem; color: var(--muted); line-height: 1.7; }
+
+  /* CONTACT */
+  .contact-section {
+    background: var(--accent);
+    color: #0a0a0a;
+    text-align: center;
+    padding: 100px 48px;
+  }
+  .contact-section .section-label { color: rgba(0,0,0,0.5); }
+  .contact-section .section-title { color: #0a0a0a; margin-bottom: 16px; }
+  .contact-sub { font-size: 1rem; color: rgba(0,0,0,0.6); margin-bottom: 48px; }
+  .contact-links { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+  .contact-link {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.78rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 14px 28px;
+    background: #0a0a0a;
+    color: var(--accent);
+    text-decoration: none;
+    border-radius: 2px;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .contact-link:hover { background: #1a1a1a; transform: translateY(-2px); }
+
+  /* FOOTER */
+  footer {
+    padding: 32px 48px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .footer-copy {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem;
+    color: var(--muted);
+    letter-spacing: 0.08em;
+  }
+  .footer-note {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem;
+    color: var(--muted);
+  }
+  .footer-note span { color: var(--accent); }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .reveal {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .reveal.visible { opacity: 1; transform: none; }
+
+  /* MOBILE */
+  @media (max-width: 768px) {
+    nav { padding: 16px 20px; }
+    .nav-links { display: none; }
+    .hero { padding: 0 20px 60px; }
+    section { padding: 70px 20px; }
+    .projects-grid { grid-template-columns: 1fr; }
+    .automation-row { flex-direction: column; }
+    .stats-strip { flex-wrap: wrap; }
+    .stat { min-width: 50%; border-bottom: 1px solid var(--border); }
+    footer { flex-direction: column; gap: 12px; text-align: center; }
+    .contact-section { padding: 70px 20px; }
+    .hero-scroll { display: none; }
+    body { cursor: auto; }
+    .cursor, .cursor-ring { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">AC/</div>
+  <div class="nav-links">
+    <a href="#work">Work</a>
+    <a href="#skills">Skills</a>
+    <a href="#process">Process</a>
+    <a href="#contact">Contact</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-tag">↳ Available for work · India</div>
+  <h1 class="hero-name">Ankit<br/><span>Choubey</span></h1>
+  <p class="hero-sub">I build AI-powered products, web apps & automation systems — solo, fast, using prompt engineering as my superpower.</p>
+  <div class="hero-cta">
+    <a href="#work" class="btn btn-primary">View my work ↓</a>
+    <a href="#contact" class="btn btn-outline">Get in touch →</a>
+  </div>
+  <div class="hero-scroll">Scroll to explore</div>
+</section>
+
+<!-- STATS -->
+<div class="stats-strip">
+  <div class="stat reveal">
+    <div class="stat-num">3+</div>
+    <div class="stat-label">Years Experience</div>
+  </div>
+  <div class="stat reveal">
+    <div class="stat-num">2</div>
+    <div class="stat-label">Live Products Built</div>
+  </div>
+  <div class="stat reveal">
+    <div class="stat-num">100%</div>
+    <div class="stat-label">Prompt Engineered</div>
+  </div>
+  <div class="stat reveal">
+    <div class="stat-num">∞</div>
+    <div class="stat-label">Automation Flows</div>
+  </div>
+</div>
+
+<!-- SKILLS -->
+<section class="skills-section" id="skills">
+  <div class="section-label">/ What I do</div>
+  <h2 class="section-title reveal">Skills &<br/>Capabilities</h2>
+  <div class="skills-grid">
+    <div class="skill-card reveal">
+      <div class="skill-icon">🤖</div>
+      <div class="skill-name">Prompt Engineering</div>
+      <div class="skill-desc">Building full products using AI — from idea to deployed app. I use LLMs as a development engine, not just a tool.</div>
+    </div>
+    <div class="skill-card reveal">
+      <div class="skill-icon">🌐</div>
+      <div class="skill-name">AI-Assisted Building</div>
+      <div class="skill-desc">I use Claude, ChatGPT & other LLMs to build and ship full web products — from frontend to Firebase backend to deployment. No traditional coding needed.</div>
+    </div>
+    <div class="skill-card reveal">
+      <div class="skill-icon">📦</div>
+      <div class="skill-name">AR Experiences</div>
+      <div class="skill-desc">WebAR product try-ons. Built a full shoe AR viewer with color picker, size selection & multiple environments.</div>
+    </div>
+    <div class="skill-card reveal">
+      <div class="skill-icon">⚡</div>
+      <div class="skill-name">Automation (n8n)</div>
+      <div class="skill-desc">n8n workflow automation, WhatsApp Business bots, software automation pipelines for real client use cases.</div>
+    </div>
+    <div class="skill-card reveal">
+      <div class="skill-icon">🧠</div>
+      <div class="skill-name">AI/ML Integration</div>
+      <div class="skill-desc">Fine-tuned and deployed custom LLM models. Integrated AI into web products end to end.</div>
+    </div>
+    <div class="skill-card reveal">
+      <div class="skill-icon">📋</div>
+      <div class="skill-name">Project Coordination</div>
+      <div class="skill-desc">3+ years managing creative and tech projects. Bridging client requirements to technical delivery.</div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="work" style="padding: 100px 48px;">
+  <div class="section-label">/ Featured work</div>
+  <h2 class="section-title reveal">Things I've<br/>Shipped</h2>
+  <div class="projects-grid">
+
+    <a href="https://ankitchaubeyy-afk.github.io/shoe-ar-test/" target="_blank" class="project-card reveal">
+      <div class="project-visual visual-ar"></div>
+      <div class="project-number">01 / 02</div>
+      <div class="project-tag tag-ar">WebAR · E-commerce</div>
+      <h3 class="project-title">Shoe AR<br/>Try-On</h3>
+      <p class="project-desc">A full browser-based AR shoe try-on experience. Users can rotate, zoom, switch colors, change sizes and view the product in AR — no app needed.</p>
+      <div class="project-tech">
+        <span class="tech-pill">WebAR</span>
+        <span class="tech-pill">Three.js</span>
+        <span class="tech-pill">JavaScript</span>
+        <span class="tech-pill">3D Models</span>
+        <span class="tech-pill">Prompt Eng.</span>
+      </div>
+    </a>
+
+    <a href="https://ankitchaubeyy-afk.github.io/rozgarbridge/home.html" target="_blank" class="project-card reveal">
+      <div class="project-visual visual-platform"></div>
+      <div class="project-number">02 / 02</div>
+      <div class="project-tag tag-platform">Platform · HR Tech</div>
+      <h3 class="project-title">RozgarBridge</h3>
+      <p class="project-desc">A full-stack job marketplace connecting talent, employers & investors. Firebase auth, Firestore, dashboards, messaging, notifications — built entirely solo.</p>
+      <div class="project-tech">
+        <span class="tech-pill">Firebase</span>
+        <span class="tech-pill">Firestore</span>
+        <span class="tech-pill">React</span>
+        <span class="tech-pill">Auth</span>
+        <span class="tech-pill">Prompt Eng.</span>
+      </div>
+    </a>
+
+  </div>
+</section>
+
+<!-- AUTOMATION -->
+<section style="padding: 0 48px 100px;">
+  <div class="section-label">/ Automation work</div>
+  <h2 class="section-title reveal">Workflows &<br/>Automations</h2>
+  <div class="automation-row">
+    <div class="auto-card reveal">
+      <div class="auto-line"></div>
+      <div class="auto-icon">💬</div>
+      <div class="auto-title">WhatsApp Business Bot</div>
+      <div class="auto-desc">Built a full WhatsApp automation using n8n — automated responses, lead capture, and CRM integration for a real business use case.</div>
+    </div>
+    <div class="auto-card reveal">
+      <div class="auto-line"></div>
+      <div class="auto-icon">🔄</div>
+      <div class="auto-title">Software Automation</div>
+      <div class="auto-desc">Custom automation flows for internal software operations — reducing manual effort and streamlining repetitive business tasks.</div>
+    </div>
+    <div class="auto-card reveal">
+      <div class="auto-line"></div>
+      <div class="auto-icon">🤖</div>
+      <div class="auto-title">AI Workflow Integration</div>
+      <div class="auto-desc">Integrated LLM models into automation pipelines — connecting AI outputs to real business actions via n8n triggers and webhooks.</div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW I WORK -->
+<section class="how-section" id="process">
+  <div class="section-label">/ My process</div>
+  <h2 class="section-title reveal">How I<br/>Work</h2>
+  <div class="process-list">
+    <div class="process-item reveal">
+      <div class="process-num">01</div>
+      <div class="process-content">
+        <div class="process-title">Understand the Problem First</div>
+        <div class="process-desc">I don't jump to tools. I think through what actually needs to be built — user flows, data structure, edge cases — before writing a single line of code.</div>
+      </div>
+    </div>
+    <div class="process-item reveal">
+      <div class="process-num">02</div>
+      <div class="process-content">
+        <div class="process-title">AI-Assisted Development</div>
+        <div class="process-desc">I use prompt engineering to architect and build faster than traditional dev cycles. The result is the same production-grade code — shipped in a fraction of the time.</div>
+      </div>
+    </div>
+    <div class="process-item reveal">
+      <div class="process-num">03</div>
+      <div class="process-content">
+        <div class="process-title">Ship, Test, Iterate</div>
+        <div class="process-desc">I deploy early and fix fast. Real feedback from live products beats perfect planning. Both my projects are live and functional.</div>
+      </div>
+    </div>
+    <div class="process-item reveal">
+      <div class="process-num">04</div>
+      <div class="process-content">
+        <div class="process-title">Automate What Can Be Automated</div>
+        <div class="process-desc">If a task repeats, I build a system around it. From WhatsApp bots to internal workflows — I'm always looking to reduce friction.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact-section" id="contact">
+  <div class="section-label">/ Let's connect</div>
+  <h2 class="section-title">Available for<br/>freelance & full-time</h2>
+  <p class="contact-sub">Looking for AI tooling, web apps, automation, or AR experiences? Let's talk.</p>
+  <div class="contact-links">
+    <a href="mailto:ankitchaubeyy@gmail.com" class="contact-link">✉ Email me</a>
+    <a href="https://www.linkedin.com/in/ankit-choubey-aaaaa2164" target="_blank" class="contact-link">in LinkedIn</a>
+    <a href="https://github.com/ankitchaubeyy-afk" target="_blank" class="contact-link">⌥ GitHub</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-copy">© 2026 Ankit Choubey</div>
+  <div class="footer-note">Built with <span>prompt engineering</span> · Shipped with intent</div>
+</footer>
+
+<script>
+  // Custom cursor
+  const cursor = document.getElementById('cursor');
+  const ring = document.getElementById('cursorRing');
+  let mx = 0, my = 0, rx = 0, ry = 0;
+  document.addEventListener('mousemove', e => {
+    mx = e.clientX; my = e.clientY;
+    cursor.style.left = mx - 5 + 'px';
+    cursor.style.top = my - 5 + 'px';
+  });
+  function animateRing() {
+    rx += (mx - rx) * 0.12;
+    ry += (my - ry) * 0.12;
+    ring.style.left = rx - 18 + 'px';
+    ring.style.top = ry - 18 + 'px';
+    requestAnimationFrame(animateRing);
+  }
+  animateRing();
+
+  // Hover expand cursor
+  document.querySelectorAll('a, button').forEach(el => {
+    el.addEventListener('mouseenter', () => {
+      cursor.style.transform = 'scale(2.5)';
+      ring.style.transform = 'scale(1.5)';
+    });
+    el.addEventListener('mouseleave', () => {
+      cursor.style.transform = 'scale(1)';
+      ring.style.transform = 'scale(1)';
+    });
+  });
+
+  // Reveal on scroll
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('visible'); }
+    });
+  }, { threshold: 0.12 });
+  reveals.forEach(r => observer.observe(r));
+</script>
+</body>
+</html>
