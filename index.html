@@ -19,7 +19,6 @@
   }
 
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
   html { scroll-behavior: smooth; }
 
   body {
@@ -34,23 +33,21 @@
   /* Custom cursor */
   .cursor {
     width: 6px; height: 6px;
-    background: var(--text);
+    background: var(--accent);
     border-radius: 50%;
     position: fixed;
     pointer-events: none;
     z-index: 9999;
-    transition: transform 0.15s ease;
-    
+    transition: transform 0.15s ease, background 0.2s;
   }
   .cursor-ring {
     width: 28px; height: 28px;
-    border: 1px solid rgba(240,237,232,0.25);
+    border: 1px solid rgba(200,241,53,0.3);
     border-radius: 50%;
     position: fixed;
     pointer-events: none;
     z-index: 9998;
     transition: all 0.1s ease;
-    
   }
 
   /* Noise overlay */
@@ -72,8 +69,8 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background: rgba(10,10,10,0.8);
-    backdrop-filter: blur(12px);
+    background: rgba(10,10,10,0.85);
+    backdrop-filter: blur(16px);
     border-bottom: 1px solid var(--border);
   }
   .nav-logo {
@@ -83,7 +80,7 @@
     letter-spacing: -0.02em;
     color: var(--accent);
   }
-  .nav-links { display: flex; gap: 32px; }
+  .nav-links { display: flex; gap: 32px; align-items: center; }
   .nav-links a {
     font-family: 'DM Mono', monospace;
     font-size: 0.75rem;
@@ -94,6 +91,29 @@
     transition: color 0.2s;
   }
   .nav-links a:hover { color: var(--accent); }
+  .nav-avail {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem;
+    color: var(--accent);
+    letter-spacing: 0.08em;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    border: 1px solid rgba(200,241,53,0.25);
+    padding: 5px 12px;
+    border-radius: 20px;
+  }
+  .nav-avail::before {
+    content: '';
+    width: 6px; height: 6px;
+    background: var(--accent);
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.4; transform: scale(0.8); }
+  }
 
   /* HERO */
   .hero {
@@ -114,6 +134,21 @@
     background-size: 60px 60px;
     opacity: 0.4;
     mask-image: radial-gradient(ellipse 80% 60% at 50% 100%, black 30%, transparent 100%);
+  }
+
+  /* Floating accent orb */
+  .hero-orb {
+    position: absolute;
+    top: 15%; right: 8%;
+    width: 320px; height: 320px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(200,241,53,0.08) 0%, transparent 70%);
+    pointer-events: none;
+    animation: orbFloat 8s ease-in-out infinite;
+  }
+  @keyframes orbFloat {
+    0%, 100% { transform: translateY(0px) scale(1); }
+    50% { transform: translateY(-20px) scale(1.05); }
   }
 
   .hero-tag {
@@ -157,6 +192,33 @@
     animation: fadeUp 0.8s 0.8s forwards;
   }
 
+  /* HERO RIGHT — role tags floating */
+  .hero-roles {
+    position: absolute;
+    right: 48px; top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    opacity: 0;
+    animation: fadeUp 0.8s 1s forwards;
+  }
+  .role-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 8px 16px;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    border-radius: 2px;
+    background: rgba(20,20,20,0.6);
+    backdrop-filter: blur(8px);
+    transition: all 0.3s;
+  }
+  .role-tag:hover { border-color: var(--accent); color: var(--accent); }
+  .role-tag.active { border-color: rgba(200,241,53,0.4); color: var(--accent); background: rgba(200,241,53,0.06); }
+
   .btn {
     font-family: 'DM Mono', monospace;
     font-size: 0.78rem;
@@ -171,11 +233,11 @@
     gap: 8px;
   }
   .btn-primary {
-    background: var(--text);
+    background: var(--accent);
     color: #0a0a0a;
     font-weight: 500;
   }
-  .btn-primary:hover { background: #d4ff4a; transform: translateY(-2px); }
+  .btn-primary:hover { background: #d4ff4a; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(200,241,53,0.2); }
   .btn-outline {
     border: 1px solid var(--border);
     color: var(--muted);
@@ -199,7 +261,7 @@
     display: block;
     width: 1px;
     height: 60px;
-    background: var(--muted);
+    background: linear-gradient(to bottom, var(--accent), transparent);
     margin: 0 auto 12px;
     animation: lineDown 1.5s 1.5s ease forwards;
     transform-origin: top;
@@ -220,7 +282,22 @@
     border-right: 1px solid var(--border);
     opacity: 0;
     animation: fadeUp 0.6s forwards;
+    position: relative;
+    overflow: hidden;
+    transition: background 0.3s;
   }
+  .stat::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--accent), transparent);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.4s;
+  }
+  .stat:hover::after { transform: scaleX(1); }
+  .stat:hover { background: #0f0f0f; }
   .stat:nth-child(1) { animation-delay: 0.1s; }
   .stat:nth-child(2) { animation-delay: 0.2s; }
   .stat:nth-child(3) { animation-delay: 0.3s; }
@@ -282,7 +359,7 @@
     position: absolute;
     top: 0; left: 0;
     width: 3px; height: 0;
-    background: var(--text);
+    background: var(--accent);
     transition: height 0.3s;
   }
   .skill-card:hover::before { height: 100%; }
@@ -340,6 +417,7 @@
   }
   .tag-ar { background: rgba(200,241,53,0.12); color: var(--accent); }
   .tag-platform { background: rgba(255,107,53,0.12); color: var(--accent2); }
+  .tag-mini { background: rgba(200,241,53,0.08); color: var(--accent); }
 
   .project-title {
     font-family: 'Syne', sans-serif;
@@ -351,9 +429,7 @@
   }
   .project-desc { font-size: 0.9rem; color: var(--muted); line-height: 1.7; margin-bottom: 32px; }
 
-  .project-tech {
-    display: flex; flex-wrap: wrap; gap: 8px;
-  }
+  .project-tech { display: flex; flex-wrap: wrap; gap: 8px; }
   .tech-pill {
     font-family: 'DM Mono', monospace;
     font-size: 0.65rem;
@@ -366,18 +442,248 @@
   }
   .project-card:hover .tech-pill { border-color: #333; color: #888; }
 
-  /* PROJECT visual flair */
+  /* MOCK PREVIEW inside project card */
+  .project-preview {
+    margin-bottom: 28px;
+    border-radius: 4px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    background: #0d0d0d;
+    height: 160px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .preview-browser-bar {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 28px;
+    background: #1a1a1a;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    padding: 0 10px;
+    gap: 6px;
+  }
+  .browser-dot {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+  }
+  .browser-dot:nth-child(1) { background: #ff5f57; }
+  .browser-dot:nth-child(2) { background: #febc2e; }
+  .browser-dot:nth-child(3) { background: #28c840; }
+  .preview-url {
+    margin-left: 10px;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.58rem;
+    color: #444;
+    letter-spacing: 0.04em;
+  }
+  .preview-content {
+    margin-top: 28px;
+    width: 100%; height: calc(100% - 28px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 8px;
+    padding: 16px;
+  }
+
+  /* AR Preview mock */
+  .ar-preview-mock {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    width: 100%;
+    padding: 0 16px;
+  }
+  .ar-shoe-silhouette {
+    width: 80px; height: 50px;
+    background: linear-gradient(135deg, var(--accent) 0%, rgba(200,241,53,0.3) 100%);
+    clip-path: polygon(0% 60%, 8% 30%, 20% 10%, 45% 5%, 70% 10%, 90% 25%, 100% 50%, 100% 80%, 0% 80%);
+    opacity: 0.7;
+    flex-shrink: 0;
+  }
+  .ar-ui-mock {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .ar-ui-row {
+    height: 6px;
+    border-radius: 3px;
+    background: #222;
+  }
+  .ar-ui-row:nth-child(1) { width: 70%; background: rgba(200,241,53,0.3); }
+  .ar-ui-row:nth-child(2) { width: 50%; }
+  .ar-ui-row:nth-child(3) { width: 60%; }
+  .ar-dots {
+    display: flex; gap: 6px; margin-top: 4px;
+  }
+  .ar-dot {
+    width: 12px; height: 12px;
+    border-radius: 50%;
+  }
+  .ar-dot:nth-child(1) { background: #fff; border: 2px solid #444; }
+  .ar-dot:nth-child(2) { background: var(--accent); }
+  .ar-dot:nth-child(3) { background: #c44; }
+  .ar-dot:nth-child(4) { background: #338; }
+  .ar-badge {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.55rem;
+    color: var(--accent);
+    border: 1px solid rgba(200,241,53,0.3);
+    padding: 2px 6px;
+    border-radius: 2px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  /* RozgarBridge preview mock */
+  .roz-preview-mock {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 0 12px;
+  }
+  .roz-header-bar {
+    background: #1a1a1a;
+    border-radius: 3px;
+    height: 22px;
+    display: flex;
+    align-items: center;
+    padding: 0 10px;
+    gap: 8px;
+  }
+  .roz-logo-mini {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.55rem;
+    font-weight: 800;
+    color: var(--accent2);
+    letter-spacing: -0.02em;
+  }
+  .roz-nav-pills { display: flex; gap: 4px; margin-left: auto; }
+  .roz-nav-pill {
+    width: 24px; height: 4px;
+    background: #2a2a2a;
+    border-radius: 2px;
+  }
+  .roz-cards {
+    display: flex;
+    gap: 6px;
+  }
+  .roz-card {
+    flex: 1;
+    background: #1a1a1a;
+    border-radius: 3px;
+    padding: 8px;
+    border: 1px solid #222;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .roz-card-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.45rem;
+    color: var(--accent2);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+  .roz-card-bar { height: 4px; border-radius: 2px; background: #2a2a2a; }
+  .roz-card-bar:nth-child(2) { width: 80%; }
+  .roz-card-bar:nth-child(3) { width: 55%; }
+  .roz-card-bar:nth-child(4) { width: 65%; }
+  .roz-badge {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.45rem;
+    background: rgba(255,107,53,0.15);
+    color: var(--accent2);
+    padding: 2px 5px;
+    border-radius: 2px;
+    align-self: flex-start;
+    margin-top: 2px;
+  }
+  .roz-stat-row {
+    display: flex;
+    gap: 4px;
+  }
+  .roz-stat-chip {
+    flex: 1;
+    background: #1a1a1a;
+    border-radius: 2px;
+    padding: 5px 8px;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.5rem;
+    color: #444;
+    text-align: center;
+    border: 1px solid #222;
+  }
+  .roz-stat-chip span {
+    display: block;
+    font-size: 0.7rem;
+    color: var(--accent2);
+    font-weight: 700;
+  }
+
   .project-visual {
     position: absolute;
     bottom: -20px; right: -20px;
     width: 140px; height: 140px;
     border-radius: 50%;
-    opacity: 0.06;
+    opacity: 0.05;
     transition: opacity 0.3s;
   }
-  .project-card:hover .project-visual { opacity: 0.1; }
+  .project-card:hover .project-visual { opacity: 0.08; }
   .visual-ar { background: radial-gradient(circle, var(--accent), transparent); }
   .visual-platform { background: radial-gradient(circle, var(--accent2), transparent); }
+
+  /* SIDE PROJECTS */
+  .side-projects {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    margin-top: 2px;
+  }
+  .side-card {
+    background: var(--card);
+    padding: 28px 28px;
+    position: relative;
+    overflow: hidden;
+    transition: background 0.2s;
+  }
+  .side-card:hover { background: #161616; }
+  .side-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--accent), transparent);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s;
+  }
+  .side-card:hover::before { transform: scaleX(1); }
+  .side-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    color: var(--muted);
+    letter-spacing: 0.12em;
+    margin-bottom: 16px;
+  }
+  .side-title {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 1rem;
+    margin-bottom: 8px;
+    line-height: 1.2;
+  }
+  .side-desc { font-size: 0.78rem; color: var(--muted); line-height: 1.6; }
 
   /* AUTOMATION */
   .automation-row {
@@ -445,6 +751,49 @@
   }
   .process-desc { font-size: 0.85rem; color: var(--muted); line-height: 1.7; }
 
+  /* 3D SECTION */
+  .artstation-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    margin-top: 40px;
+  }
+  .art-card {
+    background: var(--card);
+    padding: 36px 32px;
+    position: relative;
+    overflow: hidden;
+    transition: background 0.2s;
+  }
+  .art-card:hover { background: #181818; }
+  .art-card::after {
+    content: '';
+    position: absolute;
+    top: 0; right: 0;
+    width: 0; height: 3px;
+    background: var(--accent2);
+    transition: width 0.3s;
+  }
+  .art-card:hover::after { width: 100%; }
+  .art-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.62rem;
+    color: var(--accent2);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  .art-title {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 1.05rem;
+    margin-bottom: 10px;
+  }
+  .art-desc { font-size: 0.82rem; color: var(--muted); line-height: 1.6; }
+  .artstation-cta { margin-top: 32px; }
+
   /* CONTACT */
   .contact-section {
     background: var(--text);
@@ -470,8 +819,9 @@
     display: flex;
     align-items: center;
     gap: 8px;
+    border: 1px solid transparent;
   }
-  .contact-link:hover { background: #1a1a1a; transform: translateY(-2px); }
+  .contact-link:hover { background: #1a1a1a; transform: translateY(-2px); border-color: rgba(200,241,53,0.2); }
 
   /* FOOTER */
   footer {
@@ -512,8 +862,10 @@
     nav { padding: 16px 20px; }
     .nav-links { display: none; }
     .hero { padding: 0 20px 60px; }
+    .hero-roles { display: none; }
     section { padding: 70px 20px; }
     .projects-grid { grid-template-columns: 1fr; }
+    .side-projects { grid-template-columns: 1fr; }
     .automation-row { flex-direction: column; }
     .stats-strip { flex-wrap: wrap; }
     .stat { min-width: 50%; border-bottom: 1px solid var(--border); }
@@ -522,6 +874,7 @@
     .hero-scroll { display: none; }
     body { cursor: auto; }
     .cursor, .cursor-ring { display: none; }
+    .artstation-grid { grid-template-columns: 1fr; }
   }
 </style>
 </head>
@@ -536,18 +889,29 @@
   <div class="nav-links">
     <a href="#work">Work</a>
     <a href="#skills">Skills</a>
-    <a href="#threed">3D Work</a>
+    <a href="#threed">3D Artist</a>
     <a href="#process">Process</a>
     <a href="#contact">Contact</a>
+    <span class="nav-avail">Available</span>
   </div>
 </nav>
 
 <!-- HERO -->
 <section class="hero">
   <div class="hero-grid"></div>
-  <div class="hero-tag">↳ Available for work · India</div>
+  <div class="hero-orb"></div>
+
+  <!-- Floating role tags on right -->
+  <div class="hero-roles">
+    <div class="role-tag active">AI Builder</div>
+    <div class="role-tag">Automation Eng.</div>
+    <div class="role-tag">WebAR Dev</div>
+    <div class="role-tag">3D Artist</div>
+  </div>
+
+  <div class="hero-tag">↳ Based in India · Open to remote</div>
   <h1 class="hero-name">Ankit<br/><span>Choubey</span></h1>
-  <p class="hero-sub">I build AI-powered products, web apps & automation systems — solo, fast, using prompt engineering as my superpower.</p>
+  <p class="hero-sub">I build AI-powered products, web apps & automation systems — solo, fast, shipping with intent.</p>
   <div class="hero-cta">
     <a href="#work" class="btn btn-primary">View my work ↓</a>
     <a href="#contact" class="btn btn-outline">Get in touch →</a>
@@ -562,16 +926,16 @@
     <div class="stat-label">Years Experience</div>
   </div>
   <div class="stat reveal">
-    <div class="stat-num">2</div>
-    <div class="stat-label">Live Products Built</div>
-  </div>
-  <div class="stat reveal">
-    <div class="stat-num">100%</div>
-    <div class="stat-label">Prompt Engineered</div>
+    <div class="stat-num">3</div>
+    <div class="stat-label">Studios Worked</div>
   </div>
   <div class="stat reveal">
     <div class="stat-num">∞</div>
-    <div class="stat-label">Automation Flows</div>
+    <div class="stat-label">Megascans Published</div>
+  </div>
+  <div class="stat reveal">
+    <div class="stat-num">2</div>
+    <div class="stat-label">Live Web Products</div>
   </div>
 </div>
 
@@ -588,7 +952,7 @@
     <div class="skill-card reveal">
       <div class="skill-icon">🌐</div>
       <div class="skill-name">AI-Assisted Building</div>
-      <div class="skill-desc">I use Claude, ChatGPT & other LLMs to build and ship full web products — from frontend to Firebase backend to deployment. No traditional coding needed.</div>
+      <div class="skill-desc">Full web products — frontend to Firebase backend to deployment — built fast using Claude, ChatGPT & other LLMs.</div>
     </div>
     <div class="skill-card reveal">
       <div class="skill-icon">📦</div>
@@ -610,6 +974,11 @@
       <div class="skill-name">Project Coordination</div>
       <div class="skill-desc">3+ years managing creative and tech projects. Bridging client requirements to technical delivery.</div>
     </div>
+    <div class="skill-card reveal">
+      <div class="skill-icon">🗿</div>
+      <div class="skill-name">Hard Surface & Photogrammetry</div>
+      <div class="skill-desc">3+ years in game-ready asset pipelines — scan cleanup, retopology, LOD generation. Assets in the Quixel Megascans library.</div>
+    </div>
   </div>
 </section>
 
@@ -623,6 +992,36 @@
       <div class="project-visual visual-ar"></div>
       <div class="project-number">01 / 02</div>
       <div class="project-tag tag-ar">WebAR · E-commerce</div>
+
+      <!-- AR Preview mockup -->
+      <div class="project-preview">
+        <div class="preview-browser-bar">
+          <div class="browser-dot"></div>
+          <div class="browser-dot"></div>
+          <div class="browser-dot"></div>
+          <div class="preview-url">ankitchaubeyy-afk.github.io/shoe-ar-test/</div>
+        </div>
+        <div class="preview-content">
+          <div class="ar-preview-mock">
+            <div style="display:flex;flex-direction:column;align-items:center;gap:6px;">
+              <div class="ar-shoe-silhouette"></div>
+              <div class="ar-badge">WebAR Live</div>
+            </div>
+            <div class="ar-ui-mock">
+              <div class="ar-ui-row"></div>
+              <div class="ar-ui-row"></div>
+              <div class="ar-ui-row"></div>
+              <div class="ar-dots">
+                <div class="ar-dot"></div>
+                <div class="ar-dot"></div>
+                <div class="ar-dot"></div>
+                <div class="ar-dot"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <h3 class="project-title">Shoe AR<br/>Try-On</h3>
       <p class="project-desc">A full browser-based AR shoe try-on experience. Users can rotate, zoom, switch colors, change sizes and view the product in AR — no app needed.</p>
       <div class="project-tech">
@@ -638,6 +1037,54 @@
       <div class="project-visual visual-platform"></div>
       <div class="project-number">02 / 02</div>
       <div class="project-tag tag-platform">Platform · HR Tech</div>
+
+      <!-- RozgarBridge Preview mockup -->
+      <div class="project-preview">
+        <div class="preview-browser-bar">
+          <div class="browser-dot"></div>
+          <div class="browser-dot"></div>
+          <div class="browser-dot"></div>
+          <div class="preview-url">rozgarbridge.github.io</div>
+        </div>
+        <div class="preview-content">
+          <div class="roz-preview-mock">
+            <div class="roz-header-bar">
+              <div class="roz-logo-mini">RozgarBridge</div>
+              <div class="roz-nav-pills">
+                <div class="roz-nav-pill"></div>
+                <div class="roz-nav-pill"></div>
+                <div class="roz-nav-pill"></div>
+              </div>
+            </div>
+            <div class="roz-cards">
+              <div class="roz-card">
+                <div class="roz-card-tag">Job Post</div>
+                <div class="roz-card-bar"></div>
+                <div class="roz-card-bar"></div>
+                <div class="roz-badge">Hiring</div>
+              </div>
+              <div class="roz-card">
+                <div class="roz-card-tag">Profile</div>
+                <div class="roz-card-bar"></div>
+                <div class="roz-card-bar"></div>
+                <div class="roz-badge">Available</div>
+              </div>
+              <div class="roz-card">
+                <div class="roz-card-tag">Investor</div>
+                <div class="roz-card-bar"></div>
+                <div class="roz-card-bar"></div>
+                <div class="roz-badge">Active</div>
+              </div>
+            </div>
+            <div class="roz-stat-row">
+              <div class="roz-stat-chip"><span>3</span>Roles</div>
+              <div class="roz-stat-chip"><span>Auth</span>Firebase</div>
+              <div class="roz-stat-chip"><span>Live</span>Status</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <h3 class="project-title">RozgarBridge</h3>
       <p class="project-desc">A full-stack job marketplace connecting talent, employers & investors. Firebase auth, Firestore, dashboards, messaging, notifications — built entirely solo.</p>
       <div class="project-tech">
@@ -649,6 +1096,31 @@
       </div>
     </a>
 
+  </div>
+
+  <!-- SIDE PROJECTS / Additional work -->
+  <div style="margin-top: 40px;">
+    <div class="section-label" style="margin-bottom: 16px;">/ More work</div>
+    <div class="side-projects">
+      <div class="side-card reveal">
+        <div class="side-num">03 / —</div>
+        <div class="project-tag tag-mini" style="margin-bottom:12px;">Automation</div>
+        <div class="side-title">WhatsApp Business Bot</div>
+        <div class="side-desc">End-to-end n8n automation — automated responses, lead capture, and CRM integration for a real business client.</div>
+      </div>
+      <div class="side-card reveal">
+        <div class="side-num">04 / —</div>
+        <div class="project-tag tag-mini" style="margin-bottom:12px;">AI Pipeline</div>
+        <div class="side-title">LLM Workflow Integration</div>
+        <div class="side-desc">Connected fine-tuned LLM outputs to real business actions via n8n triggers, webhooks, and automated pipelines.</div>
+      </div>
+      <div class="side-card reveal">
+        <div class="side-num">05 / —</div>
+        <div class="project-tag" style="background:rgba(255,107,53,0.08);color:var(--accent2);margin-bottom:12px;font-family:'DM Mono',monospace;font-size:0.65rem;letter-spacing:0.1em;text-transform:uppercase;padding:4px 10px;border-radius:2px;display:inline-block;">3D · Published</div>
+        <div class="side-title">Quixel Megascans Assets</div>
+        <div class="side-desc">Photogrammetry scan cleanup → publication-ready assets, globally live in the Megascans library. Awarded Artist of the Quarter.</div>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -716,30 +1188,79 @@
 
 <!-- 3D WORK -->
 <section class="threed-section" id="threed" style="padding: 100px 48px;">
-  <div class="section-label">/ 3D & Creative work</div>
-  <h2 class="section-title reveal">3D Art &<br/>Visualization</h2>
-  <div class="artstation-grid">
-    <div class="art-card reveal">
-      <div class="art-tag">3D Modeling</div>
-      <div class="art-title">Character & Asset Design</div>
-      <div class="art-desc">3+ years of 3D modeling experience — characters, environments, and product visualization using industry-standard tools.</div>
+  <div class="section-label">/ 3D Artist work</div>
+  <h2 class="section-title reveal">Hard Surface &<br/>Photogrammetry</h2>
+
+  <!-- Experience Timeline -->
+  <div style="display:flex; flex-direction:column; gap:2px; background:var(--border); border:1px solid var(--border); margin-bottom:48px;">
+    <div class="process-item reveal" style="display:flex; gap:0; border-bottom:1px solid var(--border); overflow:hidden; transition:background 0.2s;">
+      <div style="font-family:'Syne',sans-serif; font-weight:800; font-size:0.7rem; color:var(--accent); padding:32px 24px; border-right:1px solid var(--border); min-width:120px; display:flex; flex-direction:column; justify-content:center; gap:4px; letter-spacing:0.05em;">
+        <span>JUL 2023</span><span style="color:var(--muted);">—</span><span>JAN 2026</span>
+      </div>
+      <div style="padding:32px 40px;">
+        <div style="font-family:'DM Mono',monospace; font-size:0.65rem; color:var(--accent2); letter-spacing:0.12em; text-transform:uppercase; margin-bottom:8px;">Pod 8 Studios · Quixel Megascans</div>
+        <div style="font-family:'Syne',sans-serif; font-weight:700; font-size:1.05rem; margin-bottom:10px;">Game Artist — Photogrammetry & Scan Cleanup</div>
+        <div style="font-size:0.85rem; color:var(--muted); line-height:1.7;">Cleaned and processed raw photogrammetry scan data into publication-quality game-ready assets for the globally used Quixel Megascans library. Built optimized meshes with clean topology, proper UV layouts, and multi-level LODs. Multiple assets published and live in the Megascans library.</div>
+      </div>
     </div>
-    <div class="art-card reveal">
-      <div class="art-tag">Visualization</div>
-      <div class="art-title">Product & Scene Renders</div>
-      <div class="art-desc">High-quality product renders and scene compositions. Experience that directly feeds into my AR and interactive 3D web work.</div>
+    <div class="process-item reveal" style="display:flex; gap:0; border-bottom:1px solid var(--border); overflow:hidden; transition:background 0.2s;">
+      <div style="font-family:'Syne',sans-serif; font-weight:800; font-size:0.7rem; color:var(--accent); padding:32px 24px; border-right:1px solid var(--border); min-width:120px; display:flex; flex-direction:column; justify-content:center; gap:4px; letter-spacing:0.05em;">
+        <span>DEC 2022</span><span style="color:var(--muted);">—</span><span>JUN 2023</span>
+      </div>
+      <div style="padding:32px 40px;">
+        <div style="font-family:'DM Mono',monospace; font-size:0.65rem; color:var(--accent2); letter-spacing:0.12em; text-transform:uppercase; margin-bottom:8px;">Ananta Games</div>
+        <div style="font-family:'Syne',sans-serif; font-weight:700; font-size:1.05rem; margin-bottom:10px;">3D Artist — Hard Surface & Environment Props</div>
+        <div style="font-size:0.85rem; color:var(--muted); line-height:1.7;">Modelled and textured high-quality hard surface environment props and gaming assets optimized for real-time engines. Created LODs, optimized polycount, UV maps, and PBR textures in Substance Painter.</div>
+      </div>
     </div>
-    <div class="art-card reveal">
-      <div class="art-tag">AR Bridge</div>
-      <div class="art-title">3D → WebAR Pipeline</div>
-      <div class="art-desc">My 3D background is what makes the Shoe AR project possible — I understand the full pipeline from model creation to real-time browser rendering.</div>
-    </div>
-    <div class="art-card reveal">
-      <div class="art-tag">Portfolio</div>
-      <div class="art-title">ArtStation Showcase</div>
-      <div class="art-desc">Full portfolio of 3D work available on ArtStation — showcasing range across styles, complexity, and rendering techniques.</div>
+    <div class="process-item reveal" style="display:flex; gap:0; overflow:hidden; transition:background 0.2s;">
+      <div style="font-family:'Syne',sans-serif; font-weight:800; font-size:0.7rem; color:var(--accent); padding:32px 24px; border-right:1px solid var(--border); min-width:120px; display:flex; flex-direction:column; justify-content:center; gap:4px; letter-spacing:0.05em;">
+        <span>AUG 2022</span><span style="color:var(--muted);">—</span><span>OCT 2022</span>
+      </div>
+      <div style="padding:32px 40px;">
+        <div style="font-family:'DM Mono',monospace; font-size:0.65rem; color:var(--accent2); letter-spacing:0.12em; text-transform:uppercase; margin-bottom:8px;">Technicolor India</div>
+        <div style="font-family:'Syne',sans-serif; font-weight:700; font-size:1.05rem; margin-bottom:10px;">Modelling Artist — Scan Retopology & Camera Match</div>
+        <div style="font-size:0.85rem; color:var(--muted); line-height:1.7;">Scan-based retopology and camera match modelling within a large-scale structured asset pipeline. Built SpeedTree-based environment assets and hard surface production-ready props while maintaining strict quality standards and delivery protocols.</div>
+      </div>
     </div>
   </div>
+
+  <!-- Specializations Grid -->
+  <div class="artstation-grid">
+    <div class="art-card reveal">
+      <div class="art-tag">Core Skill</div>
+      <div class="art-title">Photogrammetry & Scan Cleanup</div>
+      <div class="art-desc">End-to-end scan workflow — raw capture to publication-ready asset. Assets live in the Quixel Megascans library used by studios globally.</div>
+    </div>
+    <div class="art-card reveal">
+      <div class="art-tag">Core Skill</div>
+      <div class="art-title">Hard Surface Modeling</div>
+      <div class="art-desc">Clean topology, optimized mesh, proper UV layout — built for real-time engines. Unreal Engine ready, every time.</div>
+    </div>
+    <div class="art-card reveal">
+      <div class="art-tag">Pipeline</div>
+      <div class="art-title">LOD Generation & Optimization</div>
+      <div class="art-desc">Multi-level LOD pipelines from scan sources. PBR texturing via Substance Painter, polycount-critical builds for game performance.</div>
+    </div>
+    <div class="art-card reveal">
+      <div class="art-tag">Achievement</div>
+      <div class="art-title">Quixel Megascans Published</div>
+      <div class="art-desc">Assets published and globally available in the Megascans library. Awarded Artist of the Quarter — Automobile with Interior category.</div>
+    </div>
+  </div>
+
+  <!-- Software Pills -->
+  <div style="margin-top:40px; display:flex; flex-wrap:wrap; gap:10px; align-items:center;">
+    <span style="font-family:'DM Mono',monospace; font-size:0.65rem; color:var(--muted); letter-spacing:0.12em; text-transform:uppercase; margin-right:8px;">Tools —</span>
+    <span class="tech-pill">3DS Max</span>
+    <span class="tech-pill">ZBrush</span>
+    <span class="tech-pill">Maya</span>
+    <span class="tech-pill">Unreal Engine</span>
+    <span class="tech-pill">Substance Painter</span>
+    <span class="tech-pill">Photoshop</span>
+    <span class="tech-pill">SpeedTree</span>
+  </div>
+
   <div class="artstation-cta">
     <a href="https://ankitchaubey3011.artstation.com/" target="_blank" class="btn btn-outline" style="border-color: #ff6b35; color: #ff6b35;">View ArtStation Portfolio →</a>
   </div>
@@ -777,7 +1298,7 @@
 <!-- FOOTER -->
 <footer>
   <div class="footer-copy">© 2026 Ankit Choubey</div>
-  <div class="footer-note">Built with <span>prompt engineering</span> · Shipped with intent</div>
+  <div class="footer-note">Designed & shipped with <span>intent</span></div>
 </footer>
 
 <script>
@@ -787,19 +1308,18 @@
   let mx = 0, my = 0, rx = 0, ry = 0;
   document.addEventListener('mousemove', e => {
     mx = e.clientX; my = e.clientY;
-    cursor.style.left = mx - 5 + 'px';
-    cursor.style.top = my - 5 + 'px';
+    cursor.style.left = mx - 3 + 'px';
+    cursor.style.top = my - 3 + 'px';
   });
   function animateRing() {
     rx += (mx - rx) * 0.12;
     ry += (my - ry) * 0.12;
-    ring.style.left = rx - 18 + 'px';
-    ring.style.top = ry - 18 + 'px';
+    ring.style.left = rx - 14 + 'px';
+    ring.style.top = ry - 14 + 'px';
     requestAnimationFrame(animateRing);
   }
   animateRing();
 
-  // Hover expand cursor
   document.querySelectorAll('a, button').forEach(el => {
     el.addEventListener('mouseenter', () => {
       cursor.style.transform = 'scale(2.5)';
@@ -817,8 +1337,17 @@
     entries.forEach(e => {
       if (e.isIntersecting) { e.target.classList.add('visible'); }
     });
-  }, { threshold: 0.12 });
+  }, { threshold: 0.1 });
   reveals.forEach(r => observer.observe(r));
+
+  // Role tag cycling in hero
+  const roleTags = document.querySelectorAll('.role-tag');
+  let activeIdx = 0;
+  setInterval(() => {
+    roleTags[activeIdx].classList.remove('active');
+    activeIdx = (activeIdx + 1) % roleTags.length;
+    roleTags[activeIdx].classList.add('active');
+  }, 2000);
 </script>
 </body>
 </html>
