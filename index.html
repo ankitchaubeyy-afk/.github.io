@@ -122,11 +122,11 @@
 
   /* HERO */
   .hero {
-    min-height: 100vh;
+    min-height: 88vh;
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
-    padding: 0 clamp(24px, 4vw, 64px) 72px;
+    padding: 0 clamp(24px, 4vw, 64px) 48px;
     position: relative;
     overflow: hidden;
   }
@@ -181,7 +181,7 @@
   .hero-sub {
     font-size: 1.02rem;
     color: var(--muted);
-    margin-top: 32px;
+    margin-top: 22px;
     max-width: 500px;
     line-height: 1.7;
     opacity: 0;
@@ -189,7 +189,7 @@
   }
 
   .hero-cta {
-    margin-top: 48px;
+    margin-top: 22px;
     display: flex;
     gap: 16px;
     flex-wrap: wrap;
@@ -325,14 +325,14 @@
   }
 
   /* SECTION BASE */
-  section { padding: 90px clamp(24px, 4vw, 64px); }
+  section { padding: 58px clamp(24px, 4vw, 64px); }
   .section-label {
     font-family: 'DM Mono', monospace;
     font-size: 0.68rem;
     color: var(--accent);
     letter-spacing: 0.2em;
     text-transform: uppercase;
-    margin-bottom: 16px;
+    margin-bottom: 10px;
   }
   .section-title {
     font-family: 'Syne', sans-serif;
@@ -340,7 +340,7 @@
     font-weight: 800;
     letter-spacing: -0.055em;
     line-height: 1.0;
-    margin-bottom: 60px;
+    margin-bottom: 34px;
   }
 
   /* SKILLS */
@@ -367,7 +367,7 @@
   }
   .skill-card {
     background: var(--card);
-    padding: 28px 26px;
+    padding: 24px 24px;
     transition: background 0.2s;
     position: relative;
     overflow: hidden;
@@ -396,7 +396,7 @@
 
   .project-card {
     background: var(--card);
-    padding: 42px 36px;
+    padding: 24px 24px;
     position: relative;
     overflow: hidden;
     transition: background 0.3s;
@@ -421,7 +421,7 @@
     font-size: 0.65rem;
     color: var(--muted);
     letter-spacing: 0.15em;
-    margin-bottom: 32px;
+    margin-bottom: 20px;
   }
   .project-tag {
     display: inline-block;
@@ -443,7 +443,7 @@
     font-weight: 800;
     letter-spacing: -0.055em;
     line-height: 1.1;
-    margin-bottom: 16px;
+    margin-bottom: 10px;
   }
   .project-desc { font-size: 0.9rem; color: var(--muted); line-height: 1.7; margin-bottom: 32px; }
 
@@ -467,7 +467,7 @@
     overflow: hidden;
     border: 1px solid var(--border);
     background: #0d0d0d;
-    height: 160px;
+    height: 140px;
     position: relative;
     display: flex;
     align-items: center;
@@ -670,7 +670,7 @@
   }
   .side-card {
     background: var(--card);
-    padding: 28px 28px;
+    padding: 24px 24px;
     position: relative;
     overflow: hidden;
     transition: background 0.2s;
@@ -692,7 +692,7 @@
     font-size: 0.6rem;
     color: var(--muted);
     letter-spacing: 0.12em;
-    margin-bottom: 16px;
+    margin-bottom: 10px;
   }
   .side-title {
     font-family: 'Syne', sans-serif;
@@ -714,7 +714,7 @@
   .auto-card {
     flex: 1;
     background: var(--card);
-    padding: 36px 32px;
+    padding: 28px 28px;
     position: relative;
     overflow: hidden;
   }
@@ -754,7 +754,7 @@
     font-weight: 800;
     font-size: 0.75rem;
     color: var(--accent);
-    padding: 32px 32px;
+    padding: 24px 24px;
     border-right: 1px solid var(--border);
     min-width: 80px;
     display: flex;
@@ -780,7 +780,7 @@
   }
   .art-card {
     background: var(--card);
-    padding: 36px 32px;
+    padding: 28px 28px;
     position: relative;
     overflow: hidden;
     transition: background 0.2s;
@@ -817,7 +817,7 @@
     background: var(--text);
     color: #0a0a0a;
     text-align: center;
-    padding: 90px clamp(24px, 4vw, 64px);
+    padding: 58px clamp(24px, 4vw, 64px);
   }
   .contact-section .section-label { color: rgba(0,0,0,0.5); }
   .contact-section .section-title { color: #0a0a0a; margin-bottom: 16px; }
@@ -898,6 +898,78 @@
       padding-left: 72px !important;
       padding-right: 72px !important;
     }
+  }
+
+
+  /* Final compact layout pass: remove unwanted negative space */
+  .section-title {
+    max-width: 760px;
+  }
+
+  .skills-section,
+  .how-section {
+    padding-top: 56px;
+    padding-bottom: 56px;
+  }
+
+  #work {
+    padding-top: 56px !important;
+    padding-bottom: 56px !important;
+  }
+
+  .threed-section {
+    padding-top: 56px !important;
+    padding-bottom: 56px !important;
+  }
+
+  .project-card,
+  .skill-card,
+  .auto-card,
+  .side-card,
+  .art-card {
+    min-height: auto;
+  }
+
+  .project-title,
+  .skill-name,
+  .auto-title,
+  .side-title,
+  .art-title,
+  .process-title {
+    margin-bottom: 8px;
+  }
+
+  .project-desc {
+    margin-bottom: 20px;
+  }
+
+  .process-list,
+  .skills-grid,
+  .projects-grid,
+  .side-projects,
+  .automation-row,
+  .artstation-grid {
+    margin-top: 0;
+  }
+
+  .process-item {
+    min-height: 110px;
+  }
+
+  .process-num {
+    min-width: 72px;
+  }
+
+  @media (min-width: 1024px) {
+    .process-content {
+      padding-top: 24px !important;
+      padding-bottom: 24px !important;
+    }
+  }
+
+  @media (max-width: 768px) {
+    section { padding-top: 48px !important; padding-bottom: 48px !important; }
+    .section-title { margin-bottom: 26px; }
   }
 
   /* MOBILE */
@@ -988,7 +1060,7 @@
 </div>
 
 
-<section style="padding:76px clamp(24px,4vw,64px);background:#0d0d0d;border-top:1px solid #1e1e1e;">
+<section style="padding:52px clamp(24px,4vw,64px);background:#0d0d0d;border-top:1px solid #1e1e1e;">
 <div class="section-label">/ About</div>
 <h2 class="section-title">From 3D Production to<br/>AI Product Building</h2>
 <p style="max-width:900px;color:#999;line-height:1.9;font-size:1rem;margin-bottom:18px;">
@@ -1048,7 +1120,7 @@ I’m currently focused on <strong style="color:#c8f135;font-weight:500;">AI pro
 </section>
 
 <!-- PROJECTS -->
-<section id="work" style="padding:90px clamp(24px,4vw,64px);">
+<section id="work" style="padding:58px clamp(24px,4vw,64px);">
   <div class="section-label">/ Featured work</div>
   <h2 class="section-title reveal">Things I've<br/>Shipped</h2>
   <div class="projects-grid">
@@ -1164,7 +1236,7 @@ I’m currently focused on <strong style="color:#c8f135;font-weight:500;">AI pro
   </div>
 
   <!-- SIDE PROJECTS / Additional work -->
-  <div style="margin-top: 40px;">
+  <div style="margin-top: 24px;">
     <div class="section-label" style="margin-bottom: 16px;">/ More work</div>
     <div class="side-projects">
       <div class="side-card reveal">
@@ -1190,7 +1262,7 @@ I’m currently focused on <strong style="color:#c8f135;font-weight:500;">AI pro
 </section>
 
 <!-- AUTOMATION -->
-<section style="padding:0 clamp(24px,4vw,64px) 90px;">
+<section style="padding:0 clamp(24px,4vw,64px) 58px;">
   <div class="section-label">/ Automation work</div>
   <h2 class="section-title reveal">Workflows &<br/>Automations</h2>
   <div class="automation-row">
@@ -1252,7 +1324,7 @@ I’m currently focused on <strong style="color:#c8f135;font-weight:500;">AI pro
 </section>
 
 <!-- 3D WORK -->
-<section class="threed-section" id="threed" style="padding:90px clamp(24px,4vw,64px);">
+<section class="threed-section" id="threed" style="padding:58px clamp(24px,4vw,64px);">
   <div class="section-label">/ 3D Artist / Project Coordinator work</div>
   <h2 class="section-title reveal">Hard Surface &<br/>Photogrammetry</h2>
 
@@ -1315,7 +1387,7 @@ I’m currently focused on <strong style="color:#c8f135;font-weight:500;">AI pro
   </div>
 
   <!-- Software Pills -->
-  <div style="margin-top:40px; display:flex; flex-wrap:wrap; gap:10px; align-items:center;">
+  <div style="margin-top:24px; display:flex; flex-wrap:wrap; gap:10px; align-items:center;">
     <span style="font-family:'DM Mono',monospace; font-size:0.65rem; color:var(--muted); letter-spacing:0.12em; text-transform:uppercase; margin-right:8px;">Tools —</span>
     <span class="tech-pill">3DS Max</span>
     <span class="tech-pill">ZBrush</span>
